@@ -5,29 +5,39 @@ from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING
 class Dinosaur():
     X_POS = 80
     Y_POS = 310
+    Y_POS_DUCK = 343
     JUMP_VELOCITY = 8.5
+    DUCK_VELOCITY = 10
     def __init__(self):
         self.image = RUNNING[0]
         self.dino_rect = self.image.get_rect()
+
         self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS
         self.step_index = 0
         self.dino_run = True
         self.dino_jump= False
         self.dino_duck= False
+        self.dino_duck_while_jumping=False
         self.jump_velocity = self.JUMP_VELOCITY
+        self.duck_velocity = self.DUCK_VELOCITY
 
+    def update_dino(self, user_input):
+        if user_input[pygame.K_UP] and not self.dino_jump and not self.dino_duck and not self.dino_duck_while_jumping:
+            self.dino_run = False
+            self.dino_duck = False  
+            self.dino_jump = True        
+        elif user_input[pygame.K_DOWN] and self.dino_jump:
+            self.dino_duck_while_jumping= True
+            self.dino_jump=False            
 
-    def update(self, user_input):
-        if user_input[pygame.K_DOWN]:
+        elif user_input[pygame.K_DOWN] and not self.dino_jump:
             self.dino_duck = True
             self.dino_run = False
-        else:
-            self.dino_duck = False
-        if user_input[pygame.K_UP] and not self.dino_jump and not self.dino_duck:
-            self.dino_jump = True
-            self.dino_run = False
-        if not self.dino_jump and not self.dino_duck:
+
+
+        elif not self.dino_jump and not self.dino_duck and not self.dino_duck_while_jumping:
+            self.dino_duck_while_jumping = False
             self.dino_jump = False
             self.dino_duck = False
             self.dino_run = True
@@ -35,13 +45,12 @@ class Dinosaur():
 
         if self.dino_run:
             self.run()
+        elif self.dino_duck_while_jumping:
+            self.duck_while_jumping()
         elif self.dino_jump:
             self.jump()
         elif self.dino_duck:
             self.duck()
-
-        
-
 
         if self.step_index >=10:
             self.step_index = 0
@@ -56,13 +65,14 @@ class Dinosaur():
         self.step_index += 1
     
     def duck(self):
+
         self.image = DUCKING[0] if  self.step_index < 5 else DUCKING[1]
         self.dino_rect = self.image.get_rect()
         self.step_index += 1
         self.dino_rect.x = self.X_POS
-        self.dino_rect.y = self.Y_POS+33
+        self.dino_rect.y = self.Y_POS_DUCK
         self.step_index += 1
-
+        self.dino_duck=False
 
     def jump(self):
         self.image = JUMPING
@@ -73,7 +83,14 @@ class Dinosaur():
             self.dino_jump = False
             self.dino_rect.y = self.Y_POS
             self.jump_velocity=self.JUMP_VELOCITY
-    
+
+    def duck_while_jumping(self):
+        self.dino_rect.y+=1
+        self.duck_velocity += 0.8
+        if self.dino_rect.y == self.Y_POS:
+            self.dino_rect.y = self.Y_POS 
+            self.dino_duck_while_jumping = False
+            
 
 
             

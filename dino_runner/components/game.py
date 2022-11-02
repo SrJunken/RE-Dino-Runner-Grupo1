@@ -1,9 +1,8 @@
 import pygame
-from dino_runner.components.dinosaur import Dinosaur
-from dino_runner.components.obstacles.cactus import Cactus
-from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+#Esto Ya no porque se puede sacar de el de abajo: from dino_runner.components.obstacles.cactus import Cactus
+from dino_runner.components.obstacles.obstacles_manager import ObstacleManager, Cactus
 from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, SMALL_CACTUS, TITLE, FPS
-
+from dino_runner.components.dinosaur import Dinosaur
 
 class Game:
     def __init__(self):
@@ -17,16 +16,7 @@ class Game:
         self.x_pos_bg = 0
         self.y_pos_bg = 380
         self.player = Dinosaur()
-        self.obstacles = [Cactus(SMALL_CACTUS)]
-        
-    def draw_background(self):
-        image_width = BG.get_width()
-        self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))
-        self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
-        if self.x_pos_bg <= -image_width:
-            self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
-            self.x_pos_bg = 0
-        self.x_pos_bg -= self.game_speed
+        self.obstacle_manager = ObstacleManager()
 
     def run(self):
         # Game loop: events - update - draw
@@ -44,18 +34,23 @@ class Game:
 
     def update(self):
         user_input = pygame.key.get_pressed()
-        self.player.update_dino(user_input)
-        self.obstacles[0].update(self.game_speed, self.obstacles)
-        self.obstacle_manager.update(self.game_speed)
+        self.player.update(user_input)
+        self.obstacle_manager.update(self)
 
     def draw(self):
         self.clock.tick(FPS)
         self.screen.fill((255, 255, 255))
         self.draw_background()
         self.player.draw(self.screen)
-        self.obstacle_manager
+        self.obstacle_manager.draw(self)
         pygame.display.update()
         pygame.display.flip()
-    
 
-
+    def draw_background(self):
+        image_width = BG.get_width()
+        self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))
+        self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
+        if self.x_pos_bg <= -image_width:
+            self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
+            self.x_pos_bg = 0
+        self.x_pos_bg -= self.game_speed

@@ -1,6 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
-from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING
+from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, DINO_DEAD
 class Dinosaur(Sprite):
     X_POS = 80
     Y_POS = 310
@@ -69,6 +69,7 @@ class Dinosaur(Sprite):
         self.dino_rect.y = self.Y_POS_DUCK
         self.step_index += 1
 
-
+    def dead(self):
+        self.image = DINO_DEAD
     def draw (self,screen):
         screen.blit(self.image,(self.dino_rect.x,self.dino_rect.y))

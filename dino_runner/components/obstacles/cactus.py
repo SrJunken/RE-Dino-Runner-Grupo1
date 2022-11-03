@@ -10,10 +10,11 @@ class Cactus(Obstacle):
         type = random.randint(0,5)
 
         super().__init__(images, type)
-        print(images[type].get_height())
+        # print(images[type].get_height())
         if images[type].get_height() == SMALL_CACTUS_HEIGHT:
             self.rect.y = 325
 
         if images[type].get_height() == LARGE_CACTUS_HEIGHT:
             self.rect.y = 301
+
             

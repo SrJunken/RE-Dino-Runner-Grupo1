@@ -6,8 +6,7 @@ from dino_runner.utils.constants import FONT_STYLE
 class Score:
     def __init__(self):
         self.score = 0
-    def score(self):
-        return self.score
+
     def update(self, game):
         self.score +=1
         if self.score % 100 == 0:

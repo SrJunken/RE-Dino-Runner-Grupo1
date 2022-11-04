@@ -1,10 +1,14 @@
+
 import pygame
 from dino_runner.components.death_count import Death_count
 from dino_runner.components.obstacles.cactus import Cactus
 from dino_runner.components.obstacles.obstacles_manager import ObstacleManager, Cactus
 from dino_runner.components.score import Score
-from dino_runner.utils.constants import BG, FONT_STYLE, ICON, RUNNING, JUMPING, DINO_DEAD, SCREEN_HEIGHT, SCREEN_WIDTH, SMALL_CACTUS, TITLE, FPS
+from dino_runner.powerups.power_up_manager import PowerUpManager
+from dino_runner.powerups.shield import Shield
+from dino_runner.utils.constants import BG, DEFAULT_TYPE, FONT_STYLE, ICON, RUNNING, JUMPING, DINO_DEAD, SCREEN_HEIGHT, SCREEN_WIDTH, SMALL_CACTUS, TITLE, FPS
 from dino_runner.components.dinosaur import Dinosaur
+
 
 
 class Game:
@@ -21,8 +25,10 @@ class Game:
         self.y_pos_bg = 380
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
+        self.power_up_manager = PowerUpManager()
         self.death_count = Death_count()
         self.score = Score()
+        self.shields = [Shield()]
 
 
     def execute(self):
@@ -39,6 +45,8 @@ class Game:
         self.obstacle_manager.reset_obstacles()
         self.score.reset_score()
         self.reset_game_speed()
+        self.power_up_manager.reset_power_ups()
+        self.player.has_power_up = False
         # Game loop: events - update - draw
         while self.playing:
             self.events()
@@ -61,6 +69,8 @@ class Game:
         self.obstacle_manager.update(self)
         self.score.update(self)
 
+        self.power_up_manager.update(self.game_speed, self.player, self.score)
+
 
     def draw(self):
         self.clock.tick(FPS)
@@ -70,6 +80,9 @@ class Game:
         self.obstacle_manager.draw(self)
         self.death_count.draw(self.screen)
         self.score.draw(self.screen)
+        self.power_up_manager.draw(self.screen)
+        self.draw_power_up_active
+
 
         pygame.display.update()
         pygame.display.flip()
@@ -125,4 +138,16 @@ class Game:
                 self.executing = False
             elif event.type == pygame.KEYDOWN:
                 self.run()
+
+    def draw_power_up_active(self):
+        if self.player.has_power_up:
+            time_to_show = round((self.player.power_up_time_up - pygame.time.get_ticks())/1000)
+            if time_to_show > 0:
+                font = pygame.font.Font(FONT_STYLE, 30)
+                power_up_text = font.render(f"Time left: {time_to_show}", True, (0,0,0))
+                self.screen.blit(power_up_text, (1,1))
+                pygame.display.update()
+            else:
+                self.player.has_power_up = False
+                self.player.type = DEFAULT_TYPE
 

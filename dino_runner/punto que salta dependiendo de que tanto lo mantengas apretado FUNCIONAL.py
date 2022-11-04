@@ -10,14 +10,15 @@ pygame.init()
 
 
 
-win = pygame.display.set_mode((500, 500))
+win = pygame.display.set_mode((1100, 600))
 
-x = 250
-y = 250
+x = 80
+y = 310
 radius = 15
-vel_x = 10
+
 vel_y_subida = 10
 vel_y_bajada= 10
+
 ducking= False
 jumping = False
 air=0
@@ -115,7 +116,7 @@ while run:
 
 
     if not stop_jumping_in_the_middle_of_the_air and not jumping and not ducking and not ducking_in_the_middle_of_the_air:
-        vel_x = 10
+        
         vel_y_subida = 10
         vel_y_bajada= 10
         y = 250

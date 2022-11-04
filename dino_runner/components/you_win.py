@@ -3,7 +3,7 @@ import pygame
 from dino_runner.utils.constants import FONT_STYLE
 from dino_runner.components import game
 
-class Death_count:
+class You_win:
 
     def __init__(self):
         

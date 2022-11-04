@@ -6,6 +6,30 @@ TITLE = "El dinojuego"
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
 FPS = 30
+
+##MIXER=====================
+
+from pygame import mixer
+  
+# Starting the mixer
+
+WAV_DIR = os.path.join(os.path.dirname(__file__),"..", "assets","Sounds")
+mixer.init()
+  
+# Loading the song
+JUMP_SOUND = mixer.Sound(os.path.join(WAV_DIR, "jump.wav"))
+DIE_SOUND = mixer.Sound(os.path.join(WAV_DIR, "die.wav"))
+POINT_SOUND = mixer.Sound(os.path.join(WAV_DIR, "point.wav"))
+HAMMMMER_SOUND = mixer.Sound(os.path.join(WAV_DIR, "hammer.wav"))
+SHIELD_SOUND = mixer.Sound(os.path.join(WAV_DIR, "shield.wav"))
+# Setting the volume
+mixer.music.set_volume(0.9)
+  
+# Start playing the song
+
+  
+
+#======================
 IMG_DIR = os.path.join(os.path.dirname(__file__), "..", "assets")
 
 # Assets Constants
@@ -26,6 +50,7 @@ RUNNING_HAMMER = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun2.png")),
 ]
 DINO_DEAD = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDead.png"))
+
 JUMPING = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJump.png"))
 JUMPING_SHIELD = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJumpShield.png"))
 JUMPING_HAMMER = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJumpHammer.png"))
@@ -72,5 +97,7 @@ HEART = pygame.image.load(os.path.join(IMG_DIR, 'Other/SmallHeart.png'))
 DEFAULT_TYPE = "default"
 
 SHIELD_TYPE= "shield"
+
+HAMMER_TYPE = "hammer"
 
 FONT_STYLE = "freesansbold.ttf"

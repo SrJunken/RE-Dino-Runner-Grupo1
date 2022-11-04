@@ -1,10 +1,10 @@
 import pygame
 from pygame.sprite import Sprite
-from dino_runner.utils.constants import DUCKING_SHIELD, JUMPING_SHIELD, RUNNING, JUMPING, DUCKING, DINO_DEAD, DEFAULT_TYPE, RUNNING_SHIELD, SHIELD_TYPE
+from dino_runner.utils.constants import DUCKING_HAMMER, DUCKING_SHIELD, JUMP_SOUND, JUMPING_HAMMER, JUMPING_SHIELD, RUNNING, JUMPING, DUCKING, DINO_DEAD, DEFAULT_TYPE, RUNNING_HAMMER, RUNNING_SHIELD, SHIELD_TYPE, HAMMER_TYPE 
 
-DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD}
-JUMP_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD}
-RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD}
+DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER}
+JUMP_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER}
+RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE: RUNNING_HAMMER}
 
 class Dinosaur(Sprite):
     X_POS = 80
@@ -35,7 +35,10 @@ class Dinosaur(Sprite):
         if self.dino_run:
             self.run()
         elif self.dino_jump:
+            if self.dino_rect.y == self.Y_POS:
+                JUMP_SOUND.play()
             self.jump()
+                    
         
         elif self.dino_duck:
             self.duck()
@@ -48,6 +51,7 @@ class Dinosaur(Sprite):
             self.dino_run = False
             self.dino_duck = False
             self.dino_jump = True
+
         elif not self.dino_jump:
             self.dino_run = True
             self.dino_duck = False
@@ -63,8 +67,10 @@ class Dinosaur(Sprite):
         self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS
         self.step_index += 1
+        
 
     def jump(self):
+        
         self.image = JUMP_IMG[self.type]
         self.dino_rect.y -= self.jump_velocity * 4
         self.jump_velocity -= 0.8
@@ -91,3 +97,4 @@ class Dinosaur(Sprite):
         self.has_power_up = True
         self.power_up_time_up = start_time + (duration * 1000)
         self.type = type
+

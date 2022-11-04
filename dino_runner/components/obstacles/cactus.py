@@ -7,7 +7,7 @@ SMALL_CACTUS_HEIGHT = 71
 LARGE_CACTUS_HEIGHT = 95
 class Cactus(Obstacle):
     def __init__(self, images):
-        type = random.randint(0,5)
+        type = random.randint(0,2)
 
         super().__init__(images, type)
         # print(images[type].get_height())
